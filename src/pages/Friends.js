@@ -4,6 +4,7 @@ import axios from '../api/axios';
 const Friends = () => {
     const [friends, setFriends] = useState([]);
     const [pending, setPending] = useState([]);
+    const [outgoing, setOutgoing] = useState([]);
     const [form, setForm] = useState({ receiver_id: '' });
     const [status, setStatus] = useState('');
 
@@ -11,8 +12,10 @@ const Friends = () => {
         try {
             const resFriends = await axios.get('/friendships'); // accepted
             const resIncoming = await axios.get('/friendships/incoming'); // pending
+            const resOutgoing = await axios.get('/friendships/outgoing'); // outgoing
             setFriends(resFriends.data || []);
             setPending(resIncoming.data || []);
+            setOutgoing(resOutgoing.data || []);
         } catch (err) {
             setStatus('Failed to load friends');
         }
@@ -78,7 +81,11 @@ const Friends = () => {
                 <ul className="list-group">
                     {friends.map(f => (
                         <li key={f.friendship_id} className="list-group-item d-flex justify-content-between align-items-center">
-                            <span>{f.user.name || f.user.email}</span>
+                            <span>
+                                {f.user.name
+                                    ? `${f.user.name} (ID: ${f.user.id}, ${f.user.email})`
+                                    : `ID: ${f.user.id}, ${f.user.email}`}
+                            </span>
                             <button className="btn btn-outline-danger btn-sm" onClick={() => handleRevoke(f.friendship_id)}>Revoke</button>
                         </li>
                     ))}
@@ -106,6 +113,30 @@ const Friends = () => {
                     ))}
                 </ul>
             )}
+            <hr />
+            <h4>Sent Requests</h4>
+            {outgoing.length === 0 ? (
+                <p>You haven't sent any friend requests.</p>
+            ) : (
+                <ul className="list-group">
+                    {outgoing.map(req => (
+                        <li key={req.id} className="list-group-item">
+                            <span>
+                                To: {req.receiver.name
+                                    ? `${req.receiver.name} (${req.receiver.email})`
+                                    : req.receiver.email}
+                            </span>
+                            <br />
+                            <span>Status: <strong className={
+                                req.status === 'accepted' ? 'text-success' :
+                                    req.status === 'rejected' ? 'text-danger' :
+                                        'text-warning'
+                            }>{req.status.toUpperCase()}</strong></span>
+                        </li>
+                    ))}
+                </ul>
+            )}
+
         </div>
     );
 };

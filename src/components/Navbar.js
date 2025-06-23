@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 
 const Navbar = () => {
-  const { token, logout } = useAuth();
+  const { token, user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -14,7 +14,7 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">P2P App</Link>
+        <Link className="navbar-brand" to="/">Pay App</Link>
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav ms-auto">
             {!token ? (
@@ -49,6 +49,11 @@ const Navbar = () => {
                 <li className="nav-item">
                   <Link className="nav-link" to="/friends">Friends</Link>
                 </li>
+                {user?.role === 'admin' && (
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/admin">Admin</Link>
+                  </li>
+                )}
                 <li className="nav-item">
                   <button className="btn btn-outline-light ms-2" onClick={handleLogout}>Logout</button>
                 </li>

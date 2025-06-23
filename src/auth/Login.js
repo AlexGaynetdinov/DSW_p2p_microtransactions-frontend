@@ -13,6 +13,8 @@ const Login = () => {
     e.preventDefault();
     setError('');
     try {
+      console.log("Login request to:", axios.defaults.baseURL + '/login');
+      console.log("Payload:", { user: form });
       const res = await axios.post('/login', { user: form });
       login(res.data.token, res.data.user);
       navigate('/');

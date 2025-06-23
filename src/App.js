@@ -10,6 +10,7 @@ import MoneyRequests from './pages/MoneyRequests';
 import SplitPayments from './pages/SplitPayments';
 import PosPayments from './pages/PosPayments';
 import Friends from './pages/Friends';
+import AdminPanel from './pages/AdminPanel';
 import Navbar from './components/Navbar';
 import AuthProvider, { useAuth } from './auth/AuthContext';
 
@@ -24,78 +25,97 @@ function App() {
       <Router>
         <Navbar />
         <div className="container mt-4">
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route
-              path="/"
-              element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <PrivateRoute>
-                  <Profile />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/transactions"
-              element={
-                <PrivateRoute>
-                  <Transactions />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/topup"
-              element={
-                <PrivateRoute>
-                  <TopUp />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/requests"
-              element={
-                <PrivateRoute>
-                  <MoneyRequests />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/splits"
-              element={
-                <PrivateRoute>
-                  <SplitPayments />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/stores"
-              element={
-                <PrivateRoute>
-                  <PosPayments />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/friends"
-              element={
-                <PrivateRoute>
-                  <Friends />
-                </PrivateRoute>
-              }
-            />
-          </Routes>
+          <AppRoutes /> {/*  all routes here */}
         </div>
       </Router>
     </AuthProvider>
   );
 }
+
+function AppRoutes() {
+  const { user } = useAuth();
+
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route
+        path="/"
+        element={
+          <PrivateRoute>
+            <Dashboard />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/transactions"
+        element={
+          <PrivateRoute>
+            <Transactions />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/topup"
+        element={
+          <PrivateRoute>
+            <TopUp />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/requests"
+        element={
+          <PrivateRoute>
+            <MoneyRequests />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/splits"
+        element={
+          <PrivateRoute>
+            <SplitPayments />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/stores"
+        element={
+          <PrivateRoute>
+            <PosPayments />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/friends"
+        element={
+          <PrivateRoute>
+            <Friends />
+          </PrivateRoute>
+        }
+      />
+      {user?.role === 'admin' && (
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute>
+              <AdminPanel />
+            </PrivateRoute>
+          }
+        />
+      )}
+    </Routes>
+  );
+}
+
 
 export default App;
