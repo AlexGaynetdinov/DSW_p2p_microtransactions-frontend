@@ -46,9 +46,14 @@ const SplitPayments = () => {
             setStatus('Split created!');
             setForm({ participant_ids: '', amount: '', message: '' });
         } catch (err) {
-            const msg = err.response?.data?.error || 'Failed to create split';
+            const res = err.response?.data;
+            const msg =
+                res?.error ? res.error :
+                    Array.isArray(res?.errors) ? res.errors.join(', ') :
+                        'Failed to create split';
             setStatus(msg);
         }
+
     };
 
     const handleAction = async (id, action) => {

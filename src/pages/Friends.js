@@ -17,7 +17,14 @@ const Friends = () => {
             setPending(resIncoming.data || []);
             setOutgoing(resOutgoing.data || []);
         } catch (err) {
-            setStatus('Failed to load friends');
+            const res = err.response?.data;
+            if (res?.error) {
+                setStatus(res.error);
+            } else if (Array.isArray(res?.errors)) {
+                setStatus(res.errors.join(', ')); // join array into readable string
+            } else {
+                setStatus('Failed to load friends');
+            }
         }
     };
 
@@ -34,7 +41,14 @@ const Friends = () => {
             setForm({ receiver_id: '' });
             fetchAll();
         } catch (err) {
-            setStatus(err.response?.data?.error || 'Failed to send request');
+            const res = err.response?.data;
+            if (res?.error) {
+                setStatus(res.error);
+            } else if (Array.isArray(res?.errors)) {
+                setStatus(res.errors.join(', ')); // join array into readable string
+            } else {
+                setStatus('Failed to send request');
+            }
         }
     };
 

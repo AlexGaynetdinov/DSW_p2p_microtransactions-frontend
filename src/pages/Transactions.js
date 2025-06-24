@@ -13,8 +13,10 @@ const Transactions = () => {
       const res = await axios.get('/transactions');
       setTransactions(res.data);
     } catch (err) {
-      setStatus('Failed to load transactions');
+      console.error('Full error:', err);
+      setStatus(err.response?.data?.error || 'Failed to load transactions');
     }
+
   };
 
   useEffect(() => {
@@ -30,9 +32,14 @@ const Transactions = () => {
       setForm({ recipient_id: '', amount: '', message: '' });
       fetchTransactions();
     } catch (err) {
-      const msg = err.response?.data?.error || 'Transaction failed';
+      const res = err.response?.data;
+      const msg =
+        res?.error ? res.error :
+          Array.isArray(res?.errors) ? res.errors.join(', ') :
+            'Transaction failed';
       setStatus(msg);
     }
+
   };
 
   return (

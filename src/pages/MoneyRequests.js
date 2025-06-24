@@ -16,8 +16,10 @@ const MoneyRequests = () => {
             setIncoming(pending);
             setHistory(past);
         } catch (err) {
-            setStatus('Failed to load requests');
+            const msg = err.response?.data?.error || 'Failed to load requests';
+            setStatus(msg);
         }
+
     };
 
     const fetchSent = async () => {
@@ -25,8 +27,10 @@ const MoneyRequests = () => {
             const res = await axios.get('/money_requests/sent');
             setSentRequests(res.data);
         } catch (err) {
-            console.error('Failed to load sent requests');
+            const msg = err.response?.data?.error || 'Failed to load sent requests';
+            setStatus(msg);
         }
+
     };
 
     useEffect(() => {
@@ -42,7 +46,11 @@ const MoneyRequests = () => {
             setStatus('Request sent!');
             setForm({ recipient_id: '', amount: '', message: '' });
         } catch (err) {
-            const msg = err.response?.data?.error || 'Failed to send request';
+            const res = err.response?.data;
+            const msg =
+                res?.error ? res.error :
+                    Array.isArray(res?.errors) ? res.errors.join(', ') :
+                        'Failed to send request';
             setStatus(msg);
         }
     };

@@ -51,7 +51,7 @@ const Navbar = () => {
                 </li>
                 {user?.role === 'admin' && (
                   <li className="nav-item">
-                    <Link className="nav-link" to="/admin">Admin</Link>
+                    <Link className="btn btn-outline-warning ms-2" to="/admin">Admin</Link>
                   </li>
                 )}
                 <li className="nav-item">

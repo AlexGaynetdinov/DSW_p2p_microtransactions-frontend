@@ -30,9 +30,14 @@ const PosPayments = () => {
       setForm({ amount: '', message: '' });
       setSelected(null);
     } catch (err) {
-      const msg = err.response?.data?.error || 'Payment failed';
+      const res = err.response?.data;
+      const msg =
+        res?.error ? res.error :
+          Array.isArray(res?.errors) ? res.errors.join(', ') :
+            'Payment failed';
       setStatus(msg);
     }
+
   };
 
   return (

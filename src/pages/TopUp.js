@@ -18,9 +18,14 @@ const TopUp = () => {
       setStatus('Top-up successful!');
       setForm({ card_number: '', cardholder_name: '', cvv: '', amount: '' });
     } catch (err) {
-      const msg = err.response?.data?.errors?.join(', ') || 'Top-up failed';
+      const res = err.response?.data;
+      const msg =
+        res?.error ? res.error :
+          Array.isArray(res?.errors) ? res.errors.join(', ') :
+            'Top-up failed';
       setStatus(msg);
     }
+
   };
 
   return (

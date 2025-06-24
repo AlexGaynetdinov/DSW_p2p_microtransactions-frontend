@@ -18,14 +18,14 @@ instance.interceptors.request.use((config) => {
 
 
 // Catch token expiration and redirect
-instance.interceptors.response.use(
-  response => response,
-  error => {
-    if (error.response?.status === 401) {
-      logoutUser();
-    }
-    return Promise.reject(error);
-  }
-);
+// instance.interceptors.response.use(
+//   response => response,
+//   error => {
+//     if (error.response?.status === 401) {
+//       logoutUser();
+//     }
+//     return Promise.reject(error);
+//   }
+// );
 
 export default instance;
